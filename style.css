@@ -1,0 +1,211 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Jost", Arial, sans-serif;
+    background: #f5f5f5;
+  }
+  
+  .body-wrapper {
+    width: 100%;
+  }
+  
+/* Header стили */
+.header-bar {
+  background: white;
+  padding: 10px 0;
+  border: 1px solid #ff8562;
+  border-radius: 25px;
+}
+  
+  .content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  
+  .col {
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  
+  .col-mb-12 { width: 100%; }
+  .col-mb-6 { width: 50%; }
+  
+  @media (min-width: 768px) {
+    .col-12 { width: 100%; }
+    .col-4 { width: 33.333%; }
+  }
+  
+  @media (min-width: 1024px) {
+    .col-dt-3 { width: 25%; }
+    .col-dt-9 { width: 75%; }
+  }
+
+/* Выровнять блок действий в шапке вправо на десктопе */
+@media (min-width: 1024px) {
+  header .content {
+    align-items: center;
+  }
+  header .header-actions {
+    margin-left: auto;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+  
+.header-brand {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+.header-logo img {
+  max-width: 140px;
+  height: auto;
+  display: block;
+}
+  
+.brand-title p {
+    text-align: center;
+    margin: 0;
+    font-weight: bold;
+    color: #313131;
+  }
+  
+/* Кнопки в шапке */
+.header-actions-inner {
+    display: flex;
+  flex-direction: row;
+    gap: 5px;
+  justify-content: flex-end;
+  }
+  
+.header-button {
+    display: inline-block;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 50px;
+    margin: 2px 0;
+    font-weight: 500;
+  background: white;
+  color: black;
+  border: 1px solid;
+}
+  
+/* (убраны стили контактов/соцсетей как неиспользуемые) */
+  
+/* (убраны стили основной навигации как неиспользуемые) */
+  
+  /* Основной контент */
+  .container-main {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 15px;
+  }
+  
+  .white-box {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  
+  .col-margin-bottom {
+    margin-bottom: 20px;
+  }
+  
+  /* Боковое меню */
+  .sidebar-navrazdel ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .sidebar-navrazdel li {
+    margin-bottom: 5px;
+  }
+  
+  .sidebar-navrazdel a {
+    display: block;
+    padding: 10px 15px;
+    color: #313131;
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    transition: all 0.3s;
+  }
+  
+  .sidebar-navrazdel a:hover {
+    border-left-color: #f07930;
+    background: #f9f9f9;
+  }
+  
+  /* Форма авторизации */
+  .bx-system-auth-form table {
+    width: 100%;
+    max-width: 400px;
+    border-collapse: collapse;
+  }
+  
+  .bx-system-auth-form td {
+    padding: 8px 0;
+  }
+  
+  .bx-system-auth-form input[type="text"],
+  .bx-system-auth-form input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+  }
+  
+  .bx-system-auth-form input[type="submit"] {
+    background: #f07930;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .bx-system-auth-form input[type="submit"]:hover {
+    background: #e5671f;
+  }
+  
+/* (убраны стили хлебных крошек как неиспользуемые) */
+  
+  /* Социальные иконки в форме */
+  #socseti {
+    margin-top: 20px;
+  }
+  
+  .share {
+    position: relative;
+  }
+  
+  .share .submenu {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 100%;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    list-style: none;
+    padding: 10px;
+    margin: 0;
+  }
+  
+  .share:hover .submenu {
+    display: block;
+  }
+  
+  .share .submenu li {
+    margin: 5px 0;
+  }
+  
+  .share .submenu a {
+    color: #f07930;
+    text-decoration: none;
+  }
