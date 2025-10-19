@@ -14,39 +14,6 @@ let touchEndX = 0;
 let touchEndY = 0;
 let isTouchActive = false;
 
-// Добавляем визуальную обратную связь
-function showSwipeDirection(direction) {
-  const directions = {
-    "ArrowUp": "↑",
-    "ArrowDown": "↓", 
-    "ArrowLeft": "←",
-    "ArrowRight": "→"
-  };
-  
-  // Создаем временный элемент для показа направления
-  const indicator = document.createElement("div");
-  indicator.textContent = directions[direction];
-  indicator.style.cssText = `
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 4rem;
-    color: rgba(255, 255, 255, 0.8);
-    pointer-events: none;
-    z-index: 1000;
-    animation: fadeInOut 0.3s ease-in-out;
-  `;
-  
-  document.body.appendChild(indicator);
-  
-  // Удаляем индикатор через 300ms
-  setTimeout(() => {
-    if (indicator.parentNode) {
-      indicator.parentNode.removeChild(indicator);
-    }
-  }, 300);
-}
 
 function startGame() {
   // Очищаем игровое поле
@@ -247,22 +214,18 @@ function handleSwipe() {
     // Горизонтальный свайп
     if (angle > -45 && angle < 45) {
       // Свайп вправо
-      showSwipeDirection("ArrowRight");
       executeMove("ArrowRight");
     } else if (angle > 135 || angle < -135) {
       // Свайп влево
-      showSwipeDirection("ArrowLeft");
       executeMove("ArrowLeft");
     }
   } else {
     // Вертикальный свайп
     if (angle > 45 && angle < 135) {
       // Свайп вниз
-      showSwipeDirection("ArrowDown");
       executeMove("ArrowDown");
     } else if (angle > -135 && angle < -45) {
       // Свайп вверх
-      showSwipeDirection("ArrowUp");
       executeMove("ArrowUp");
     }
   }
