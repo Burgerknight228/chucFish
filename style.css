@@ -21,6 +21,7 @@ body {
   gap: 2vmin;
 }
 
+
 #game-board {
   --cell-size: 20vmin;
   --cell-gap: 2vmin;
