@@ -7,6 +7,12 @@ const restartButton = document.getElementById("restart-button");
 let grid = new Grid(gameBoard);
 let gameStarted = false;
 
+// Переменные для сенсорных жестов
+let touchStartX = 0;
+let touchStartY = 0;
+let touchEndX = 0;
+let touchEndY = 0;
+
 function startGame() {
   // Очищаем игровое поле
   gameBoard.innerHTML = "";
@@ -34,64 +40,16 @@ restartButton.addEventListener("click", startGame);
 
 
 function setupInputOnce() {
+  // Обработчик клавиатуры
   window.addEventListener("keydown", handleInput, { once: true });
+  
+  // Обработчики сенсорных событий
+  gameBoard.addEventListener("touchstart", handleTouchStart, { passive: true });
+  gameBoard.addEventListener("touchend", handleTouchEnd, { passive: true });
 }
 
 async function handleInput(event) {
-  // Не обрабатываем ввод, если игра не активна
-  if (!gameStarted) {
-    setupInputOnce();
-    return;
-  }
-  
-  switch (event.key) {
-    case "ArrowUp":
-      if (!canMoveUp()) {
-        setupInputOnce();
-        return;
-      }
-      await moveUp();
-      break;
-    case "ArrowDown":
-      if (!canMoveDown()) {
-        setupInputOnce();
-        return;
-      }
-      await moveDown();
-      break;
-    case "ArrowLeft":
-      if (!canMoveLeft()) {
-        setupInputOnce();
-        return;
-      }
-      await moveLeft();
-      break;
-    case "ArrowRight":
-      if (!canMoveRight()) {
-        setupInputOnce();
-        return;
-      }
-      await moveRight();
-      break;
-    default:
-      setupInputOnce();
-      return;
-  }
-
-  const newTile = new Tile(gameBoard);
-  grid.getRandomEmptyCell().linkTile(newTile);
-
-  if (!canMoveUp() && !canMoveDown() && !canMoveLeft() && !canMoveRight()) {
-    await newTile.waitForAnimationEnd();
-    
-    // Показываем кнопку перезапуска при окончании игры
-    restartButton.style.display = "block";
-    gameStarted = false;
-    
-    return;
-  }
-
-  setupInputOnce();
+  await executeMove(event.key);
 }
 
 async function moveUp() {
@@ -185,4 +143,111 @@ function canMoveInGroup(group) {
     const targetCell = group[index - 1];
     return targetCell.canAccept(cell.linkedTile);
   });
+}
+
+// Функции для обработки сенсорных событий
+function handleTouchStart(event) {
+  if (!gameStarted) return;
+  
+  const touch = event.touches[0];
+  touchStartX = touch.clientX;
+  touchStartY = touch.clientY;
+}
+
+function handleTouchEnd(event) {
+  if (!gameStarted) return;
+  
+  const touch = event.changedTouches[0];
+  touchEndX = touch.clientX;
+  touchEndY = touch.clientY;
+  
+  handleSwipe();
+}
+
+function handleSwipe() {
+  const deltaX = touchEndX - touchStartX;
+  const deltaY = touchEndY - touchStartY;
+  const minSwipeDistance = 50; // Минимальное расстояние для свайпа
+  
+  // Определяем направление свайпа
+  if (Math.abs(deltaX) > Math.abs(deltaY)) {
+    // Горизонтальный свайп
+    if (Math.abs(deltaX) > minSwipeDistance) {
+      if (deltaX > 0) {
+        // Свайп вправо
+        executeMove("ArrowRight");
+      } else {
+        // Свайп влево
+        executeMove("ArrowLeft");
+      }
+    }
+  } else {
+    // Вертикальный свайп
+    if (Math.abs(deltaY) > minSwipeDistance) {
+      if (deltaY > 0) {
+        // Свайп вниз
+        executeMove("ArrowDown");
+      } else {
+        // Свайп вверх
+        executeMove("ArrowUp");
+      }
+    }
+  }
+}
+
+async function executeMove(direction) {
+  // Не обрабатываем ввод, если игра не активна
+  if (!gameStarted) {
+    setupInputOnce();
+    return;
+  }
+  
+  switch (direction) {
+    case "ArrowUp":
+      if (!canMoveUp()) {
+        setupInputOnce();
+        return;
+      }
+      await moveUp();
+      break;
+    case "ArrowDown":
+      if (!canMoveDown()) {
+        setupInputOnce();
+        return;
+      }
+      await moveDown();
+      break;
+    case "ArrowLeft":
+      if (!canMoveLeft()) {
+        setupInputOnce();
+        return;
+      }
+      await moveLeft();
+      break;
+    case "ArrowRight":
+      if (!canMoveRight()) {
+        setupInputOnce();
+        return;
+      }
+      await moveRight();
+      break;
+    default:
+      setupInputOnce();
+      return;
+  }
+
+  const newTile = new Tile(gameBoard);
+  grid.getRandomEmptyCell().linkTile(newTile);
+
+  if (!canMoveUp() && !canMoveDown() && !canMoveLeft() && !canMoveRight()) {
+    await newTile.waitForAnimationEnd();
+    
+    // Показываем кнопку перезапуска при окончании игры
+    restartButton.style.display = "block";
+    gameStarted = false;
+    
+    return;
+  }
+
+  setupInputOnce();
 }

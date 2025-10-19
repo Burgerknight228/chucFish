@@ -82,3 +82,50 @@ body {
 #restart-button:active {
   background-color: #e53935;
 }
+
+/* Стили для мобильных устройств */
+@media (max-width: 768px) {
+  #game-board {
+    --cell-size: 18vmin;
+    --cell-gap: 1.5vmin;
+  }
+  
+  .tile {
+    font-size: 6vmin;
+  }
+  
+  #restart-button {
+    font-size: 4vmin;
+    padding: 2vmin 4vmin;
+  }
+  
+  body {
+    padding: 2vmin;
+  }
+}
+
+@media (max-width: 480px) {
+  #game-board {
+    --cell-size: 16vmin;
+    --cell-gap: 1vmin;
+  }
+  
+  .tile {
+    font-size: 5vmin;
+  }
+  
+  #restart-button {
+    font-size: 3.5vmin;
+    padding: 1.5vmin 3vmin;
+  }
+}
+
+/* Предотвращение выделения текста при свайпах */
+#game-board {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
