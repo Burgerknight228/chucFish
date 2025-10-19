@@ -12,6 +12,41 @@ let touchStartX = 0;
 let touchStartY = 0;
 let touchEndX = 0;
 let touchEndY = 0;
+let isTouchActive = false;
+
+// Добавляем визуальную обратную связь
+function showSwipeDirection(direction) {
+  const directions = {
+    "ArrowUp": "↑",
+    "ArrowDown": "↓", 
+    "ArrowLeft": "←",
+    "ArrowRight": "→"
+  };
+  
+  // Создаем временный элемент для показа направления
+  const indicator = document.createElement("div");
+  indicator.textContent = directions[direction];
+  indicator.style.cssText = `
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4rem;
+    color: rgba(255, 255, 255, 0.8);
+    pointer-events: none;
+    z-index: 1000;
+    animation: fadeInOut 0.3s ease-in-out;
+  `;
+  
+  document.body.appendChild(indicator);
+  
+  // Удаляем индикатор через 300ms
+  setTimeout(() => {
+    if (indicator.parentNode) {
+      indicator.parentNode.removeChild(indicator);
+    }
+  }, 300);
+}
 
 function startGame() {
   // Очищаем игровое поле
@@ -38,14 +73,28 @@ startGame();
 // Обработчик кнопки перезапуска
 restartButton.addEventListener("click", startGame);
 
+// Дополнительная защита от прокрутки страницы
+document.addEventListener("touchmove", function(event) {
+  // Предотвращаем прокрутку только если касание началось на игровом поле
+  if (isTouchActive) {
+    event.preventDefault();
+  }
+}, { passive: false });
+
+// Предотвращаем контекстное меню на длинное нажатие
+document.addEventListener("contextmenu", function(event) {
+  event.preventDefault();
+});
+
 
 function setupInputOnce() {
   // Обработчик клавиатуры
   window.addEventListener("keydown", handleInput, { once: true });
   
   // Обработчики сенсорных событий
-  gameBoard.addEventListener("touchstart", handleTouchStart, { passive: true });
-  gameBoard.addEventListener("touchend", handleTouchEnd, { passive: true });
+  gameBoard.addEventListener("touchstart", handleTouchStart, { passive: false });
+  gameBoard.addEventListener("touchmove", handleTouchMove, { passive: false });
+  gameBoard.addEventListener("touchend", handleTouchEnd, { passive: false });
 }
 
 async function handleInput(event) {
@@ -152,45 +201,69 @@ function handleTouchStart(event) {
   const touch = event.touches[0];
   touchStartX = touch.clientX;
   touchStartY = touch.clientY;
+  isTouchActive = true;
+  
+  // Предотвращаем прокрутку страницы
+  event.preventDefault();
+}
+
+function handleTouchMove(event) {
+  if (!gameStarted || !isTouchActive) return;
+  
+  // Предотвращаем прокрутку страницы во время свайпа
+  event.preventDefault();
 }
 
 function handleTouchEnd(event) {
-  if (!gameStarted) return;
+  if (!gameStarted || !isTouchActive) return;
   
   const touch = event.changedTouches[0];
   touchEndX = touch.clientX;
   touchEndY = touch.clientY;
   
+  // Предотвращаем прокрутку страницы
+  event.preventDefault();
+  
   handleSwipe();
+  isTouchActive = false;
 }
 
 function handleSwipe() {
   const deltaX = touchEndX - touchStartX;
   const deltaY = touchEndY - touchStartY;
-  const minSwipeDistance = 50; // Минимальное расстояние для свайпа
+  const minSwipeDistance = 30; // Уменьшили минимальное расстояние для более чувствительного свайпа
+  const maxSwipeDistance = 200; // Максимальное расстояние для предотвращения случайных свайпов
   
-  // Определяем направление свайпа
+  // Проверяем, что свайп достаточно длинный, но не слишком длинный
+  const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+  if (distance < minSwipeDistance || distance > maxSwipeDistance) {
+    return;
+  }
+  
+  // Определяем направление свайпа с учетом угла
+  const angle = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
+  
   if (Math.abs(deltaX) > Math.abs(deltaY)) {
     // Горизонтальный свайп
-    if (Math.abs(deltaX) > minSwipeDistance) {
-      if (deltaX > 0) {
-        // Свайп вправо
-        executeMove("ArrowRight");
-      } else {
-        // Свайп влево
-        executeMove("ArrowLeft");
-      }
+    if (angle > -45 && angle < 45) {
+      // Свайп вправо
+      showSwipeDirection("ArrowRight");
+      executeMove("ArrowRight");
+    } else if (angle > 135 || angle < -135) {
+      // Свайп влево
+      showSwipeDirection("ArrowLeft");
+      executeMove("ArrowLeft");
     }
   } else {
     // Вертикальный свайп
-    if (Math.abs(deltaY) > minSwipeDistance) {
-      if (deltaY > 0) {
-        // Свайп вниз
-        executeMove("ArrowDown");
-      } else {
-        // Свайп вверх
-        executeMove("ArrowUp");
-      }
+    if (angle > 45 && angle < 135) {
+      // Свайп вниз
+      showSwipeDirection("ArrowDown");
+      executeMove("ArrowDown");
+    } else if (angle > -135 && angle < -45) {
+      // Свайп вверх
+      showSwipeDirection("ArrowUp");
+      executeMove("ArrowUp");
     }
   }
 }

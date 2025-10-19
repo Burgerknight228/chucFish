@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>2048 - Telegram Mini App Test</title>
+  <link rel="stylesheet" href="./style.css">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="./script.js" type="module"></script>
+</head>
+<body>
+  <div id="game-container">
+    <div id="game-board">
+    </div>
+    <button id="restart-button" style="display: none;">Начать заново</button>
+  </div>
+  
+  <script>
+    // Инициализация Telegram Web App
+    if (window.Telegram && window.Telegram.WebApp) {
+      const tg = window.Telegram.WebApp;
+      tg.ready();
+      tg.expand();
+      
+      // Настройка темы
+      document.body.style.backgroundColor = tg.themeParams.bg_color || '#333';
+      
+      // Обработка кнопки "Назад"
+      tg.onEvent('backButtonClicked', function() {
+        tg.close();
+      });
+      
+      // Показываем кнопку "Назад"
+      tg.BackButton.show();
+    }
+  </script>
+</body>
+</html>
