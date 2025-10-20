@@ -19,47 +19,35 @@
   </div>
   
   <script>
-    // Конфигурация бота
-    const BOT_CONFIG = {
-      // Замените на ваш токен бота
-      BOT_TOKEN: '8425376529:AAH7OV8VqeDDpIXgWxC73FzPYsidC-xCMg4',
-      // Замените на ваш chat_id (ID чата, куда отправлять сообщения)
-      CHAT_ID: '722943049'
-    };
-    
-    // Функция для отправки информации о пользователе в бот
-    async function sendUserInfoToBot(user) {
+    // Отправка через Telegram Mini App (без Bot API с фронтенда)
+    let userInfoSent = false;
+    function sendUserInfoToBot(tg, user) {
+      if (userInfoSent) return; // защита от повторной отправки
       try {
-        const message = `🎮 Новый пользователь в игре 2048:
-        
- ID: ${user.id}
- Username: ${user.username ? '@' + user.username : 'не установлен'}
- Имя: ${user.first_name || 'не указано'}
- Фамилия: ${user.last_name || 'не указана'}
- Язык: ${user.language_code || 'не определен'}
- Premium: ${user.is_premium ? 'Да' : 'Нет'}
- Время: ${new Date().toLocaleString('ru-RU')}`;
-
-        // Отправляем через Bot API
-        const response = await fetch(`https://api.telegram.org/bot${BOT_CONFIG.BOT_TOKEN}/sendMessage`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            chat_id: BOT_CONFIG.CHAT_ID,
-            text: message,
-            parse_mode: 'HTML'
-          })
-        });
-        
-        if (response.ok) {
-          console.log('Информация о пользователе отправлена в бот');
-        } else {
-          console.error('Ошибка отправки в бот:', await response.text());
+        if (!tg || !tg.sendData) {
+          console.warn('Откройте страницу внутри Telegram Mini App.');
+          return;
         }
+
+        const payload = {
+          type: 'user_info',
+          allow_user_id_only: 722943049, // ваш Telegram user_id для проверки на стороне бота
+          user: {
+            id: user.id,
+            username: user.username || null,
+            first_name: user.first_name || null,
+            last_name: user.last_name || null,
+            language_code: user.language_code || null,
+            is_premium: Boolean(user.is_premium)
+          },
+          sent_at: new Date().toISOString()
+        };
+
+        tg.sendData(JSON.stringify(payload));
+        userInfoSent = true;
+        console.log('Данные отправлены через WebApp.sendData');
       } catch (error) {
-        console.error('Ошибка при отправке в бот:', error);
+        console.error('Ошибка при отправке через WebApp.sendData:', error);
       }
     }
     
@@ -84,9 +72,16 @@
           language_code: user.language_code,
           is_premium: user.is_premium
         });
-        
-        // Отправляем информацию в Telegram бот
-        sendUserInfoToBot(user);
+
+        // Автоматическая одноразовая отправка при старте Mini App
+        sendUserInfoToBot(tg, user);
+
+        // Кнопка на всякий случай, если хотите ручной триггер
+        tg.MainButton.setText('Отправить данные в бота');
+        tg.MainButton.show();
+        tg.onEvent('mainButtonClicked', function() {
+          sendUserInfoToBot(tg, user);
+        });
       }
       
       // Обработка кнопки "Назад"
@@ -96,6 +91,8 @@
       
       // Показываем кнопку "Назад"
       tg.BackButton.show();
+    } else {
+      console.warn('Telegram WebApp SDK недоступен. Откройте файл внутри Telegram.');
     }
   </script>
 </body>
