@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
@@ -19,37 +19,7 @@
   </div>
   
   <script>
-    // Отправка через Telegram Mini App (без Bot API с фронтенда)
-    let userInfoSent = false;
-    function sendUserInfoToBot(tg, user) {
-      if (userInfoSent) return; // защита от повторной отправки
-      try {
-        if (!tg || !tg.sendData) {
-          console.warn('Откройте страницу внутри Telegram Mini App.');
-          return;
-        }
-
-        const payload = {
-          type: 'user_info',
-          allow_user_id_only: 722943049, // ваш Telegram user_id для проверки на стороне бота
-          user: {
-            id: user.id,
-            username: user.username || null,
-            first_name: user.first_name || null,
-            last_name: user.last_name || null,
-            language_code: user.language_code || null,
-            is_premium: Boolean(user.is_premium)
-          },
-          sent_at: new Date().toISOString()
-        };
-
-        tg.sendData(JSON.stringify(payload));
-        userInfoSent = true;
-        console.log('Данные отправлены через WebApp.sendData');
-      } catch (error) {
-        console.error('Ошибка при отправке через WebApp.sendData:', error);
-      }
-    }
+    // Минимальная инициализация Telegram WebApp без отправки пользовательских данных
     
     // Инициализация Telegram Web App
     if (window.Telegram && window.Telegram.WebApp) {
@@ -59,30 +29,6 @@
       
       // Настройка темы
       document.body.style.backgroundColor = tg.themeParams.bg_color || '#333';
-      
-      // Получение информации о пользователе
-      const user = tg.initDataUnsafe?.user;
-      if (user) {
-        // Выводим полную информацию о пользователе в консоль
-        console.log('Информация о пользователе:', {
-          id: user.id,
-          username: user.username,
-          first_name: user.first_name,
-          last_name: user.last_name,
-          language_code: user.language_code,
-          is_premium: user.is_premium
-        });
-
-        // Автоматическая одноразовая отправка при старте Mini App
-        sendUserInfoToBot(tg, user);
-
-        // Кнопка на всякий случай, если хотите ручной триггер
-        tg.MainButton.setText('Отправить данные в бота');
-        tg.MainButton.show();
-        tg.onEvent('mainButtonClicked', function() {
-          sendUserInfoToBot(tg, user);
-        });
-      }
       
       // Обработка кнопки "Назад"
       tg.onEvent('backButtonClicked', function() {
@@ -96,4 +42,4 @@
     }
   </script>
 </body>
-</html>
+</html> -->
