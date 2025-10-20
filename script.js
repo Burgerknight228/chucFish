@@ -7,7 +7,6 @@ const restartButton = document.getElementById("restart-button");
 let grid = new Grid(gameBoard);
 let gameStarted = false;
 
-// Переменные для сенсорных жестов
 let touchStartX = 0;
 let touchStartY = 0;
 let touchEndX = 0;
@@ -16,49 +15,38 @@ let isTouchActive = false;
 
 
 function startGame() {
-  // Очищаем игровое поле
+
   gameBoard.innerHTML = "";
   
-  // Создаем новую сетку
   grid = new Grid(gameBoard);
   
-  // Добавляем два начальных тайла
   grid.getRandomEmptyCell().linkTile(new Tile(gameBoard));
   grid.getRandomEmptyCell().linkTile(new Tile(gameBoard));
   
-  // Скрываем кнопку перезапуска
   restartButton.style.display = "none";
   
-  // Настраиваем обработчик ввода
   setupInputOnce();
   gameStarted = true;
 }
 
-// Начинаем игру
 startGame();
 
-// Обработчик кнопки перезапуска
 restartButton.addEventListener("click", startGame);
 
-// Дополнительная защита от прокрутки страницы
 document.addEventListener("touchmove", function(event) {
-  // Предотвращаем прокрутку только если касание началось на игровом поле
   if (isTouchActive) {
     event.preventDefault();
   }
 }, { passive: false });
 
-// Предотвращаем контекстное меню на длинное нажатие
 document.addEventListener("contextmenu", function(event) {
   event.preventDefault();
 });
 
 
 function setupInputOnce() {
-  // Обработчик клавиатуры
   window.addEventListener("keydown", handleInput, { once: true });
   
-  // Обработчики сенсорных событий
   gameBoard.addEventListener("touchstart", handleTouchStart, { passive: false });
   gameBoard.addEventListener("touchmove", handleTouchMove, { passive: false });
   gameBoard.addEventListener("touchend", handleTouchEnd, { passive: false });
@@ -161,7 +149,6 @@ function canMoveInGroup(group) {
   });
 }
 
-// Функции для обработки сенсорных событий
 function handleTouchStart(event) {
   if (!gameStarted) return;
   
@@ -170,14 +157,12 @@ function handleTouchStart(event) {
   touchStartY = touch.clientY;
   isTouchActive = true;
   
-  // Предотвращаем прокрутку страницы
   event.preventDefault();
 }
 
 function handleTouchMove(event) {
   if (!gameStarted || !isTouchActive) return;
   
-  // Предотвращаем прокрутку страницы во время свайпа
   event.preventDefault();
 }
 
@@ -188,7 +173,6 @@ function handleTouchEnd(event) {
   touchEndX = touch.clientX;
   touchEndY = touch.clientY;
   
-  // Предотвращаем прокрутку страницы
   event.preventDefault();
   
   handleSwipe();
@@ -198,41 +182,32 @@ function handleTouchEnd(event) {
 function handleSwipe() {
   const deltaX = touchEndX - touchStartX;
   const deltaY = touchEndY - touchStartY;
-  const minSwipeDistance = 30; // Уменьшили минимальное расстояние для более чувствительного свайпа
-  const maxSwipeDistance = 200; // Максимальное расстояние для предотвращения случайных свайпов
+  const minSwipeDistance = 30;
+  const maxSwipeDistance = 200;
   
-  // Проверяем, что свайп достаточно длинный, но не слишком длинный
   const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
   if (distance < minSwipeDistance || distance > maxSwipeDistance) {
     return;
   }
   
-  // Определяем направление свайпа с учетом угла
   const angle = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
   
   if (Math.abs(deltaX) > Math.abs(deltaY)) {
-    // Горизонтальный свайп
     if (angle > -45 && angle < 45) {
-      // Свайп вправо
       executeMove("ArrowRight");
     } else if (angle > 135 || angle < -135) {
-      // Свайп влево
       executeMove("ArrowLeft");
     }
   } else {
-    // Вертикальный свайп
     if (angle > 45 && angle < 135) {
-      // Свайп вниз
       executeMove("ArrowDown");
     } else if (angle > -135 && angle < -45) {
-      // Свайп вверх
       executeMove("ArrowUp");
     }
   }
 }
 
 async function executeMove(direction) {
-  // Не обрабатываем ввод, если игра не активна
   if (!gameStarted) {
     setupInputOnce();
     return;
@@ -278,7 +253,6 @@ async function executeMove(direction) {
   if (!canMoveUp() && !canMoveDown() && !canMoveLeft() && !canMoveRight()) {
     await newTile.waitForAnimationEnd();
     
-    // Показываем кнопку перезапуска при окончании игры
     restartButton.style.display = "block";
     gameStarted = false;
     
