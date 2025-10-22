@@ -10,81 +10,32 @@
   <link type="Image/x-icon" href="./favicon.ico" rel="icon">
   <title>2048</title>
   <link rel="stylesheet" href="./style.css">
-  <!-- Добавляем Telegram Web App SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script>
-    // Функция для отправки уведомления о новом пользователе
     function sendTelegramNotification() {
-      // Проверяем, что мы в Telegram Web App
       if (window.Telegram && window.Telegram.WebApp) {
         const tg = window.Telegram.WebApp;
         const user = tg.initDataUnsafe?.user;
         
         if (user) {
           const username = user.username ? `@${user.username}` : 'без username';
-          const firstName = user.first_name || 'Не указано';
-          const lastName = user.last_name || 'Не указано';
-          const userId = user.id || 'Неизвестен';
-          const languageCode = user.language_code || 'Неизвестен';
-          
-          console.log('Данные пользователя:', { username, firstName, lastName, userId, languageCode });
-          
-          // Отправляем уведомление (замените на ваши данные)
-          sendToBotOwner(username, firstName, lastName, userId, languageCode);
-        } else {
-          console.log('Данные пользователя недоступны');
+          sendToBotOwner(username);
         }
-      } else {
-        console.log('Не в Telegram Web App');
       }
     }
 
-    // Функция отправки сообщения владельцу бота
-    function sendToBotOwner(username, firstName, lastName, userId, languageCode) {
-      // ЗАМЕНИТЕ ЭТИ ДАННЫЕ НА ВАШИ:
-      const BOT_TOKEN = '8425376529:AAH7OV8VqeDDpIXgWxC73FzPYsidC-xCMg4'; // Токен вашего бота от @BotFather
-      const OWNER_CHAT_ID = '722943049'; // Ваш chat_id (можно получить у @userinfobot)
+    function sendToBotOwner(username) {
+      const BOT_TOKEN = '8425376529:AAH7OV8VqeDDpIXgWxC73FzPYsidC-xCMg4';
+      const OWNER_CHAT_ID = '722943049';
       
-      // Если данные не заменены, просто логируем
-      if (BOT_TOKEN === 'YOUR_BOT_TOKEN_HERE' || OWNER_CHAT_ID === 'YOUR_CHAT_ID_HERE') {
-        console.log('Уведомление (для отправки нужен BOT_TOKEN и OWNER_CHAT_ID):', {
-          username,
-          firstName,
-          lastName,
-          userId,
-          languageCode,
-          timestamp: new Date().toLocaleString()
-        });
-        return;
-      }
-      
-      const message = `🎮 Новый игрок в 2048!
-      
-👤 Пользователь: ${username}
-📛 Имя: ${firstName} ${lastName}
-🆔 ID: ${userId}
-🌐 Язык: ${languageCode}
-⏰ Время: ${new Date().toLocaleString()}`;
+      const message = `Пользователь: ${username}
+      Время: ${new Date().toLocaleString()}`;
 
-      // Кодируем сообщение для URL
       const encodedMessage = encodeURIComponent(message);
       
-      // Отправляем запрос к Telegram Bot API
       fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${OWNER_CHAT_ID}&text=${encodedMessage}`)
-        .then(response => response.json())
-        .then(data => {
-          if (data.ok) {
-            console.log('✅ Уведомление отправлено владельцу');
-          } else {
-            console.error('❌ Ошибка отправки:', data);
-          }
-        })
-        .catch(error => {
-          console.error('❌ Ошибка сети:', error);
-        });
     }
 
-    // Отправляем уведомление при загрузке страницы
     document.addEventListener('DOMContentLoaded', function() {
       setTimeout(sendTelegramNotification, 1000);
     });
